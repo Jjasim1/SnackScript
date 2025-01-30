@@ -1,0 +1,16 @@
+{
+  "name": "SnackScript",
+  "version": "1.0.0",
+  "description": "A programming language project for CMSI 3802",
+  "type": "module",
+  "main": "src/SnackScript.js",
+  "scripts": {
+    "test": "c8 node --test test/**/*.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "c8": "^10.1.3"
+  }
+}
