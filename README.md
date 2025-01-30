@@ -38,19 +38,90 @@ console.log("hello, world")
 </td>
 </table>
 
-SnackScript:
-🍽️ "Hello, world" (print)
+### Declaration
+
+<table>
+<tr> <th>SnackScript</th><th>JavaScript</th><tr>
+</tr>
+<td>
+
+```SnackScript
 x 🍳 3 (declare x = 3)
-🥗 or 🍲 (true or false)
-1 + 2 = 3
-🥡 [1, 2, 3, 4] (array)
+```
 
-JavaScript:
-console.log("hello, world")
+</td>
+
+<td>
+
+```
 var x = 3
+```
+
+</td>
+</table>
+
+### Boolean
+
+<table>
+<tr> <th>SnackScript</th><th>JavaScript</th><tr>
+</tr>
+<td>
+
+```SnackScript
+🥗 or 🍲 (true or false)
+```
+
+</td>
+
+<td>
+
+```
 true or false
-1 + 2 = 3
+```
+
+</td>
+</table>
+
+### Arrays
+
+<table>
+<tr> <th>SnackScript</th><th>JavaScript</th><tr>
+</tr>
+<td>
+
+```SnackScript
+🥡 [1, 2, 3, 4] (array)
+```
+
+</td>
+
+<td>
+
+```
 var x = [1, 2, 3, 4];
+```
 
+</td>
+</table>
 
-at least 5 examples
+### Arithmetic
+
+<table>
+<tr> <th>SnackScript</th><th>JavaScript</th><tr>
+</tr>
+<td>
+
+```SnackScript
+1 + 2 = 3
+```
+
+</td>
+
+<td>
+
+```
+1 + 2 = 3
+```
+
+</td>
+</table>
