@@ -8,7 +8,7 @@
     "test": "c8 node --test test/**/*.test.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jody Jasim, Matthew De Jesus, Taylor Musso",
   "license": "ISC",
   "devDependencies": {
     "c8": "^10.1.3"
