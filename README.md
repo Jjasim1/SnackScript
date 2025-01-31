@@ -1,4 +1,7 @@
 # SnackScript
+
+![logo](https://github.com/Jjasim1/SnackScript/blob/main/docs/logo.png)
+
 A programming language project for CMSI 3802
 Written By: Jody Jasim, Taylor Musso, Matthew De Jesus 
 
