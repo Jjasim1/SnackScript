@@ -19,7 +19,7 @@ Long ago, a mother and her child were traveling multiple days across the cold, i
 
 ## Examples
 
-### Print
+### Print Statement
 
 <table>
 <tr> <th>SnackScript</th><th>JavaScript</th><tr>
@@ -27,7 +27,7 @@ Long ago, a mother and her child were traveling multiple days across the cold, i
 <td>
 
 ```SnackScript
-🍽️ "Hello, world"
+cast("Hello, World!")
 ```
 
 </td>
@@ -35,13 +35,13 @@ Long ago, a mother and her child were traveling multiple days across the cold, i
 <td>
 
 ```
-console.log("hello, world")
+console.log("Hello, World!");
 ```
 
 </td>
 </table>
 
-### Declaration
+### Variable Declaration
 
 <table>
 <tr> <th>SnackScript</th><th>JavaScript</th><tr>
@@ -49,7 +49,8 @@ console.log("hello, world")
 <td>
 
 ```SnackScript
-x 🍳 3 (declare x = 3)
+candles age = 20
+frost name = "Vanellope"
 ```
 
 </td>
@@ -57,7 +58,8 @@ x 🍳 3 (declare x = 3)
 <td>
 
 ```
-var x = 3
+let age = 20;
+const name = "Vanellope"
 ```
 
 </td>
@@ -71,7 +73,8 @@ var x = 3
 <td>
 
 ```SnackScript
-🥗 or 🍲 (true or false)
+condition isYummy = true;
+condition isYucky = false;
 ```
 
 </td>
@@ -79,7 +82,8 @@ var x = 3
 <td>
 
 ```
-true or false
+let isYummy = true;
+let isYucky = false;
 ```
 
 </td>
@@ -93,7 +97,7 @@ true or false
 <td>
 
 ```SnackScript
-🥡 [1, 2, 3, 4] (array)
+recipe numbers = [1,2,3,4]
 ```
 
 </td>
@@ -101,7 +105,7 @@ true or false
 <td>
 
 ```
-var x = [1, 2, 3, 4];
+let x = [1, 2, 3, 4];
 ```
 
 </td>
@@ -115,7 +119,7 @@ var x = [1, 2, 3, 4];
 <td>
 
 ```SnackScript
-1 + 2 = 3
+candles result = 10 + 5 * 2;
 ```
 
 </td>
@@ -123,7 +127,7 @@ var x = [1, 2, 3, 4];
 <td>
 
 ```
-1 + 2 = 3
+let result = 10 + 5 * 2;
 ```
 
 </td>
