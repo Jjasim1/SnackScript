@@ -254,7 +254,7 @@ var fib = function(n) {
   🎂:
     🫗 'F'
 🍱 student_grades = {name: determine_grade(score) for name, score in student_scores}
-🍥 student, grade in student.grades.🥚:
+🍥 student, grade in student_grades.🥚:
   🍽️ student + ":" + grade
 ```
 
@@ -314,8 +314,6 @@ for student, grade in student_grades.items():
       🍽️ "Stopped the engine for the", self.year, self.make, self.model
     else:
       🍽️ "The engine is already stopped"
-
-my_car = Car("Hennessey", "Venom F5", 2021)
 ```
 
 </td>
@@ -343,9 +341,6 @@ class Car:
       print("Stopped the engine for the", self.year, self.make, self.model)
     else:
       print("The engine is already stopped")
-
-my_car = Car("Hennessey", "Venom F5", 2021)
-
 ```
 
 </td>
