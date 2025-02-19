@@ -1,0 +1,106 @@
+SnackScript {
+  Program = Statement+
+  
+  Statement = "🫙" id ":" Block                               --class
+            | "🥘" id Params ":" Block                        --function
+            | "🥘" id ":" Block                               --simplefunction
+            | "🍥" "(" ForInit ")" Block                      --forloop
+            | "🍥" id "in" id ("." "🥚")? Block               --foreach 
+            | "🧁" Exp Block ElseIfPart* ElsePart?            --if
+            | "🍽️" ExpList                                    --print
+            | "🫗" Exp                                         --return
+            | "🥡" id "=" CollectionLit                       --collection
+            | "🍱" id "=" "{" CompExp "}"                     --comprehension
+            | "🍳" VarDecls                                   --vardecl
+            | id "=" Exp                                      --assign
+            | id "+=" Exp                                     --addassign
+            | "🍦" (~"\n" any)*                               --comment
+            | "🍨" (~"🍨" any)* "🍨"                          --multicomment
+  
+  Block = ":" NewLine IndentMarker Statement+ DedentMarker
+  
+  MethodDecl = "🥘" id "(" ParamList ")" ":" Block
+  
+  Params = ParamsWithList
+         | EmptyParams
+  
+  ParamsWithList = "(" ParamList ")"
+  EmptyParams = ""
+  
+  ParamList = NonEmptyParamList
+          | EmptyParamList
+  
+  NonEmptyParamList = ParamItem ("," ParamItem)*
+  EmptyParamList = ""
+  
+  ParamItem = "🍳"? id id?
+  
+  ForInit = "🍳" id "=" Exp "," Exp "," id "++"
+  
+  ElseIfPart = "🍰" Exp Block
+  
+  ElsePart = "🎂" Block
+  
+  ExpList = Exp ("," Exp)*
+          | stringLit ("," (Exp | stringLit))*
+  
+  VarDecls = VarDecl ("," VarDecl)*
+  
+  VarDecl = id ("=" Exp)?
+  
+  CompExp = id ":" Exp "for" id "," id "in" id "_" id
+  
+  CollectionLit = ArrayLit
+                | DictLit
+  
+  ArrayLit = "[" (ArrayItem ("," ArrayItem)*)? "]"
+  
+  DictLit = "{" (DictItem ("," DictItem)*)? "}"
+  
+  ArrayItem = TupleItem
+            | SimpleItem
+            
+  TupleItem = "(" Exp ("," Exp)+ ")"
+  SimpleItem = Exp
+  
+  DictItem = Exp ":" Exp
+  
+  Exp = Exp1 RelOp Exp1                                       --binary
+      | Exp1
+  
+  Exp1 = Exp1 AddOp Term                                      --binary
+       | Term
+  
+  Term = Term MulOp Factor                                    --binary
+       | Factor
+  
+  Factor = "-" Factor                                         --neg
+         | Primary
+  
+  Primary = id "(" (Exp ("," Exp)*)? ")"                      --call
+          | BoolLit                                           --bool
+          | numeral                                           --num
+          | stringLit                                         --string
+          | id                                                --var
+          | "(" Exp ")"                                       --paren
+  
+  BoolLit = "🥗" | "🍲"
+  
+  RelOp = "<=" | ">=" | "==" | "!=" | "<" | ">"
+  AddOp = "+" | "-"
+  MulOp = "*" | "/" | "%"
+  
+  stringLit = "\"" (~"\"" any)* "\""
+  
+  numeral = digit+ ("." digit+)?
+  
+  id = ~keyword letter (alnum | "_" | "*")*
+  
+  keyword = "in" | "for"
+  
+  NewLine = "\n" | "\r\n"
+  IndentMarker = &(space+)  // Just a positive lookahead, not consuming input
+  DedentMarker = &(space*)  // Just a positive lookahead, not consuming input
+  
+  space += "🍦" (~"\n" any)*                                  --comment
+}
