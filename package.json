@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/SnackScript.js",
   "scripts": {
-    "test": "c8 node --test test/**/*.test.js"
+    "test": "c8 node --test test/*.test.js"
   },
   "repository": {
     "type": "git",

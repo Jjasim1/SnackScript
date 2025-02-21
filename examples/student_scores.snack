@@ -1,15 +1,22 @@
-🥡 student_scores = [ ('Annie', 91), ('Barbara', 58), ('Charlie', 49), ('Daniel', 51) ]
+🥡 student_scores = [ ("Annie", 91), ("Barbara", 58), ("Charlie", 49), ("Daniel", 51) ]
 🥘 determine_grade(score):
   🧁 score >= 90:
-    🫗 'A'
+    🫗 "A"
+  ;
   🍰 score >= 80:
-    🫗 'B'
+    🫗 "B"
+  ;
   🍰 score >= 70:
-    🫗 'C'
+    🫗 "C"
+  ;
   🍰 score >= 60:
-    🫗 'D'
+    🫗 "D"
+  ;
   🎂:
-    🫗 'F'
+    🫗 "F"
+  ;
+;
 🍱 student_grades = {name: determine_grade(score) for name, score in student_scores}
-🍥 student, grade in student.grades.🥚:
+🍥 student, grade in student_grades.🥚:
   🍽️ student + ":" + grade
+;

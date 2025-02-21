@@ -4,17 +4,25 @@
     self.model = model
     self.year = year
     self.engine_started = 🍲
+  ;
 
   🥘 start_engine(self):
     🧁 not self.engine_started:
       self.engine_Started = 🥗
       🍽️ "Started the engine for the", self.year, self.make, self.model
+    ;
     🎂:
       🍽️ "The engine is already running"
+    ;
+  ;
 
   🥘 stop_engine(self):
     🧁 self.engine_started:
       self.engine_started = 🍲
       🍽️ "Stopped the engine for the", self.year, self.make, self.model
-    else:
+    ;
+    🎂:
       🍽️ "The engine is already stopped"
+    ;
+  ;
+;

@@ -1,23 +1,21 @@
 SnackScript {
   Program = Statement+
   
-  Statement = "🫙" id ":" Block                               --class
-            | "🥘" id Params ":" Block                        --function
-            | "🥘" id ":" Block                               --simplefunction
-            | "🍥" "(" ForInit ")" Block                      --forloop
-            | "🍥" id "in" id ("." "🥚")? Block               --foreach 
-            | "🧁" Exp Block ElseIfPart* ElsePart?            --if
+  Statement = "🫙" id Block                               --class
+            | "🥘" id Params Block                        --function
+            | "🥘" id Block                               --simplefunction
+            | "🍥" "(" ForInit ")" Block                  --forloop
+            | "🍥" ids "in" id ("." "🥚")? Block          --foreach 
+            | "🧁" Exp Block ElseIfPart*  ElsePart?       --if
             | "🍽️" ExpList                                    --print
-            | "🫗" Exp                                         --return
+            | "🫗" Exp                                        --return
             | "🥡" id "=" CollectionLit                       --collection
             | "🍱" id "=" "{" CompExp "}"                     --comprehension
             | "🍳" VarDecls                                   --vardecl
-            | id "=" Exp                                      --assign
-            | id "+=" Exp                                     --addassign
-            | "🍦" (~"\n" any)*                               --comment
-            | "🍨" (~"🍨" any)* "🍨"                          --multicomment
+            | DottedId "=" Exp                                      --assign
+            | DottedId "+=" Exp                                     --addassign
   
-  Block = ":" NewLine IndentMarker Statement+ DedentMarker
+  Block = ":" Statement+ ";"
   
   MethodDecl = "🥘" id "(" ParamList ")" ":" Block
   
@@ -33,7 +31,7 @@ SnackScript {
   NonEmptyParamList = ParamItem ("," ParamItem)*
   EmptyParamList = ""
   
-  ParamItem = "🍳"? id id?
+  ParamItem = "🍳"? id
   
   ForInit = "🍳" id "=" Exp "," Exp "," id "++"
   
@@ -48,7 +46,7 @@ SnackScript {
   
   VarDecl = id ("=" Exp)?
   
-  CompExp = id ":" Exp "for" id "," id "in" id "_" id
+  CompExp = id ":" Exp "for" id "," id "in" id
   
   CollectionLit = ArrayLit
                 | DictLit
@@ -74,14 +72,14 @@ SnackScript {
   Term = Term MulOp Factor                                    --binary
        | Factor
   
-  Factor = "-" Factor                                         --neg
+  Factor = "not" Factor                                         --neg
          | Primary
   
-  Primary = id "(" (Exp ("," Exp)*)? ")"                      --call
+  Primary = DottedId "(" (Exp ("," Exp)*)? ")"                      --call
           | BoolLit                                           --bool
           | numeral                                           --num
           | stringLit                                         --string
-          | id                                                --var
+          | DottedId                                                --var
           | "(" Exp ")"                                       --paren
   
   BoolLit = "🥗" | "🍲"
@@ -94,13 +92,18 @@ SnackScript {
   
   numeral = digit+ ("." digit+)?
   
-  id = ~keyword letter (alnum | "_" | "*")*
+  id = ~keyword (letter | "_") (alnum | "_" | "*")*
+  ids = id (", " id)*
+
+  DottedId = id ("." id)*
   
   keyword = "in" | "for"
   
-  NewLine = "\n" | "\r\n"
+  NewLine = "\n"+
   IndentMarker = &(space+)  // Just a positive lookahead, not consuming input
   DedentMarker = &(space*)  // Just a positive lookahead, not consuming input
   
-  space += "🍦" (~"\n" any)*                                  --comment
+  space += comment | multicomment
+  comment = "🍦" (~"\n" any)*                               --comment
+  multicomment = "🍨" (~"🍨" any)* "🍨"                      --multicomment
 }
