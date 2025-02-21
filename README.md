@@ -33,6 +33,7 @@ Long ago, a mother and her child were traveling multiple days across the cold, i
      multi-line comment
      :) 🍨
   🍽️ "Hello, world"
+;
 
 say_hello()
 ```
@@ -61,10 +62,12 @@ say_hello();
 
 ```SnackScript
 🍥 (🍳 i = 1, i <= 10, i++):
-  🍝 row = ""
-  🍥 (🍳 j = 1; j <= 10; j++):
+  🍳 row = ""
+  🍥 (🍳 j = 1, j <= 10, j++):
     row += (i * j) + "\t"
+  ;
   🍽️ row
+;
 ```
 
 </td>
@@ -98,6 +101,8 @@ for (let i = 1; i <= 10; i++) {
     a = b
     b = f
   🫗 f
+  ;
+;
 ```
 
 </td>
@@ -127,21 +132,28 @@ var fib = function(n) {
 <td>
 
 ```SnackScript
-🥡 student_scores = [ ('Annie', 91), ('Barbara', 58), ('Charlie', 49), ('Daniel', 51) ]
+🥡 student_scores = [ ("Annie", 91), ("Barbara", 58), ("Charlie", 49), ("Daniel", 51) ]
 🥘 determine_grade(score):
   🧁 score >= 90:
-    🫗 'A'
+    🫗 "A"
+  ;
   🍰 score >= 80:
-    🫗 'B'
+    🫗 "B"
+  ;
   🍰 score >= 70:
-    🫗 'C'
+    🫗 "C"
+  ;
   🍰 score >= 60:
-    🫗 'D'
+    🫗 "D"
+  ;
   🎂:
-    🫗 'F'
+    🫗 "F"
+  ;
+;
 🍱 student_grades = {name: determine_grade(score) for name, score in student_scores}
 🍥 student, grade in student_grades.🥚:
   🍽️ student + ":" + grade
+;
 ```
 
 </td>
@@ -186,20 +198,28 @@ for student, grade in student_grades.items():
     self.model = model
     self.year = year
     self.engine_started = 🍲
+  ;
 
   🥘 start_engine(self):
     🧁 not self.engine_started:
       self.engine_Started = 🥗
       🍽️ "Started the engine for the", self.year, self.make, self.model
+    ;
     🎂:
       🍽️ "The engine is already running"
+    ;
+  ;
 
   🥘 stop_engine(self):
     🧁 self.engine_started:
       self.engine_started = 🍲
       🍽️ "Stopped the engine for the", self.year, self.make, self.model
-    else:
+    ;
+    🎂:
       🍽️ "The engine is already stopped"
+    ;
+  ;
+;
 ```
 
 </td>
