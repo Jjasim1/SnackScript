@@ -1,5 +1,5 @@
 {
-  "name": "SnackScript",
+  "name": "snackscript",
   "version": "1.0.0",
   "description": "A programming language project for CMSI 3802",
   "type": "module",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jjasim1/SnackScript.git"
+    "url": "git+https://github.com/Jjasim1/SnackScript.git"
   },
   "keywords": [],
   "author": "Jody Jasim, Matthew De Jesus, Taylor Musso",
@@ -20,5 +20,14 @@
   "dependencies": {
     "graph-stringify": "^1.1.0",
     "ohm-js": "^17.1.0"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
+  },
+  "bugs": {
+    "url": "https://github.com/Jjasim1/SnackScript/issues"
+  },
+  "homepage": "https://github.com/Jjasim1/SnackScript#readme"
 }
