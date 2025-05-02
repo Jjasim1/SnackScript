@@ -5,4 +5,11 @@
   🫗 n * 2
 ;
 
+🍽️ isEven(double🥘 isEven (🍳 n):
+  🫗 n % 2 == 1
+;
+🥘 double (🍳 n):
+  🫗 n*2
+;
+
 🍽️ isEven(double(7))
