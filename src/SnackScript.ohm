@@ -1,64 +1,72 @@
 SnackScript {
   Program = Statement+
   
-  Statement = "🫙" id Block                               --class
-            | "🥘" id Params Block                        --function
-            | "🥘" id Block                               --simplefunction
-            | "🍥" "(" ForInit ")" Block                  --forloop
-            | "🍥" ids "in" id ("." "🥚")? Block          --foreach 
-            | "🧁" Exp Block ElseIfPart*  ElsePart?       --if
-            | "🍽️" ExpList                                    --print
-            | "🫗" Exp                                        --return
-            | "🥡" id "=" CollectionLit                       --collection
-            | "🍱" id "=" "{" CompExp "}"                     --comprehension
-            | "🍳" VarDecls                                   --vardecl
-            | DottedId "=" Exp                                      --assign
-            | DottedId "+=" Exp                                     --addassign
+  Statement = "🫙" id Block                                       --class
+            | "🥘" id "(" Params ")" Block                        --function
+            | "🥘" id Block                                       --simplefunction
+            | "🍥" id "in" Exp ("..." | "..<") Exp Block          --forloop
+            | "🍥" ListOf<id, ","> "in" Primary Block             --foreach 
+            | "🍤" Exp Block                                      --while
+            | "🧁" Exp Block ElseIfPart*  ElsePart?               --if
+            | "🍽️" ExpList                                        --print
+            | "🫗" Exp?                                           --return
+            | "🫖"                                                --break
+            | "🥡" id "=" CollectionLit                           --collection
+            | "🍱" id "=" "{" CompExp "}"                         --comprehension
+            | VarDecl                                   
+            | Primary "=" Exp                                      --assign
+            | Primary "+=" Exp                                     --addassign
+            | Primary ("++" | "--")                        --bump
+            | Primary_call                             --call
   
   Block = ":" Statement+ ";"
   
   MethodDecl = "🥘" id "(" ParamList ")" ":" Block
   
-  Params = ParamsWithList
+  Type = "🧈"         --bool
+         | "🍳"        --int
+         | "🍳"        --float
+         | "🍝"        --string
+         | "🥮"        --void
+         | "🍚"        --any
+
+  Params = ParamList
          | EmptyParams
   
-  ParamsWithList = "(" ParamList ")"
   EmptyParams = ""
   
   ParamList = NonEmptyParamList
           | EmptyParamList
   
-  NonEmptyParamList = ParamItem ("," ParamItem)*
+  NonEmptyParamList = ListOf<ParamItem, ",">
   EmptyParamList = ""
   
-  ParamItem = "🍳"? id
+  ParamItem = Type id
   
-  ForInit = "🍳" id "=" Exp "," Exp "," id "++"
+  ForInit = VarDecl "," (id | numeral) RelOp (id | numeral) "," id "++"
   
   ElseIfPart = "🍰" Exp Block
   
   ElsePart = "🎂" Block
   
-  ExpList = Exp ("," Exp)*
-          | stringLit ("," (Exp | stringLit))*
+  ExpList = ListOf<(Exp | stringLit), ",">
   
-  VarDecls = VarDecl ("," VarDecl)*
   
-  VarDecl = id ("=" Exp)?
+  VarDecl = Type id "=" Exp
   
-  CompExp = id ":" Exp "for" id "," id "in" id
+  CompExp = id ":" Exp "for" ListOf<id, ","> "in" id
   
   CollectionLit = ArrayLit
                 | DictLit
   
-  ArrayLit = "[" (ArrayItem ("," ArrayItem)*)? "]"
+  ArrayLit = "[" ListOf<ArrayItem, ","> "]"
   
-  DictLit = "{" (DictItem ("," DictItem)*)? "}"
+  DictLit = "{" ListOf<DictItem, ","> "}"
   
   ArrayItem = TupleItem
             | SimpleItem
             
-  TupleItem = "(" Exp ("," Exp)+ ")"
+  TupleItem = "(" ListOf<Exp, ","> ")"
   SimpleItem = Exp
   
   DictItem = Exp ":" Exp
@@ -75,11 +83,12 @@ SnackScript {
   Factor = "not" Factor                                         --neg
          | Primary
   
-  Primary = DottedId "(" (Exp ("," Exp)*)? ")"                      --call
+  Primary = Primary "(" ListOf<Exp, ","> ")"                  --call
           | BoolLit                                           --bool
           | numeral                                           --num
           | stringLit                                         --string
-          | DottedId                                                --var
+          | DottedId                                          --var
+          | id                                                --id
           | "(" Exp ")"                                       --paren
   
   BoolLit = "🥗" | "🍲"
@@ -95,7 +104,7 @@ SnackScript {
   id = ~keyword (letter | "_") (alnum | "_" | "*")*
   ids = id (", " id)*
 
-  DottedId = id ("." id)*
+  DottedId = Primary ("." | "?.") id
   
   keyword = "in" | "for"
   

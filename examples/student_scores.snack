@@ -1,5 +1,5 @@
 🥡 student_scores = [ ("Annie", 91), ("Barbara", 58), ("Charlie", 49), ("Daniel", 51) ]
-🥘 determine_grade(score):
+🥘 determine_grade(🍳 score):
   🧁 score >= 90:
     🫗 "A"
   ;
@@ -17,6 +17,6 @@
   ;
 ;
 🍱 student_grades = {name: determine_grade(score) for name, score in student_scores}
-🍥 student, grade in student_grades.🥚:
-  🍽️ student + ":" + grade
+🍥 student, grade in student_grades.items:
+  🍽️ student, ":", grade
 ;

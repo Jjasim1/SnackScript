@@ -2,134 +2,225 @@ export function program(statements) {
   return { kind: "Program", statements }
 }
 
-export function snackClass(name) {
+export function variableDeclaration(variable, initializer) {
+  return { kind: "VariableDeclaration", variable, initializer }
+}
+
+export function variable(name, type) {
+  return { kind: "Variable", name, type }
+}
+
+export function typeDeclaration(type) {
+  return { kind: "TypeDeclaration", type }
+}
+
+export const booleanType = "🧈"
+export const intType = "🍳"
+export const floatType = "🍳"
+export const stringType = "🍝"
+export const voidType = "🥮"
+export const anyType = "🍚"
+export const classType = ""
+
+export function structType(name, fields) {
+  return { kind: "StructType", name, fields }
+}
+
+export function field(name, type) {
+  return { kind: "Field", name, type }
+}
+
+export function functionDeclaration(fun) {
+  return { kind: "FunctionDeclaration", fun }
+}
+
+export function fun(name, params, body, type) {
+  return { kind: "Function", name, params, body, type }
+}
+
+export function intrinsicFunction(name, type) {
+  return { kind: "Function", name, type, intrinsic: true }
+}
+
+export function classDeclaration(classType) {
+  return { kind: "ClassDeclaration", classType }
+}
+
+export function cl(name) {
   return { kind: "Class", name, methods: [] }
 }
 
-export function classDeclaration(classEntity) {
-  return { kind: "ClassDeclaration", "class": classEntity }
+export function arrayType(baseType) {
+  return { kind: "ArrayType", baseType }
 }
 
-export function snackFunction(name) {
-  return { kind: "Function", name, parameters: [], body: [] }
+export function dictType(keyType, valueType) {
+  return { kind: "DictType", keyType, valueType }
 }
 
-export function parameter(name, byRef = false) {
-  return { kind: "Parameter", name, byRef };
+export function functionType(paramTypes, returnType) {
+  return { kind: "FunctionType", paramTypes, returnType }
 }
 
-export function functionDeclaration(func) {
-  return { kind: "FunctionDeclaration", function: func }
+export function optionalType(baseType) {
+  return { kind: "OptionalType", baseType }
 }
 
-export function variable(name, mutable) {
-  return { kind: "Variable", name, mutable }
+export function increment(variable) {
+  return { kind: "Increment", variable }
 }
 
-export function variableDeclarations(declarations) {
-  return { kind: "VariableDeclarations", declarations }
+export function decrement(variable) {
+  return { kind: "Decrement", variable }
 }
 
-export function array(name, items) {
-  return { kind: "Collection", collectionType: "Array", name, items }
+export function assignment(target, source) {
+  return { kind: "Assignment", target, source }
 }
 
-export function dictionary(name, entries) {
-  return { kind: "Collection", collectionType: "Dictionary", name, entries }
+export function addAssignment(target, source) {
+  return { kind: "AddAssignment", target, source }
 }
 
-export function tuple(items) {
-  return { kind: "Tuple", items }
-}
-
-export function collectionDeclaration(id, collection) {
-  return { kind: "CollectionDeclaration", id, collection }
-}
-
-export function ifStatement(condition, body, elseIfs, elsePart) {
-  return { kind: "IfStatement", condition, body, elseIfs, elsePart }
-}
-
-export function forLoop(variable, start, end, step, body) {
-  return { kind: "ForLoop", variable, start, end, step, body }
-}
-
-export function forEach(variables, collection, useValues, body) {
-  return { kind: "ForEach", variables, collection, useValues, body }
-}
-
-export function binary(op, left, right) {
-  return { kind: "BinaryExpression", op, left, right }
-}
-
-export function integer(value) {
-  return { kind: "IntegerLiteral", value }
-}
-
-export function string(value) {
-  return { kind: "StringLiteral", value }
-}
-
-export function assignment(target, value) {
-  return { kind: "Assignment", target, value }
-}
-
-export function addAssignment(target, value) {
-  return { kind: "AddAssignment", target, value }
-}
+export const breakStatement = { kind: "BreakStatement" }
 
 export function returnStatement(expression) {
   return { kind: "ReturnStatement", expression }
 }
 
-export function printStatement(expressions) {
-  return { kind: "PrintStatement", expressions }
+export const shortReturnStatement = { kind: "ShortReturnStatement" }
+
+export function ifStatement(test, consequent, alternate) {
+  return { kind: "IfStatement", test, consequent, alternate }
 }
 
-export function callStatement(call) {
-  return { kind: "CallStatement", call }
+export function shortIfStatement(test, consequent) {
+  return { kind: "ShortIfStatement", test, consequent }
+}
+
+export function whileStatement(test, body) {
+  return { kind: "WhileStatement", test, body }
+}
+
+export function repeatStatement(count, body) {
+  return { kind: "RepeatStatement", count, body }
+}
+
+export function forRangeStatement(iterator, low, op, high, body) {
+  return { kind: "ForRangeStatement", iterator, low, op, high, body }
+}
+
+export function forLoop(iterator, collection, body) {
+  return { kind: "ForLoop", iterator, collection, body }
+}
+
+export function conditional(test, consequent, alternate, type) {
+  return { kind: "Conditional", test, consequent, alternate, type }
+}
+
+export function binary(op, left, right, type) {
+  return { kind: "BinaryExpression", op, left, right, type }
+}
+
+export function unary(op, operand, type) {
+  return { kind: "UnaryExpression", op, operand, type }
+}
+
+export function emptyOptional(baseType) {
+  return { kind: "EmptyOptional", baseType, type: optionalType(baseType) }
+}
+
+export function subscript(array, index) {
+  return {
+    kind: "SubscriptExpression",
+    array,
+    index,
+    type: array.type.baseType,
+  }
+}
+
+export function arrayExpression(elements) {
+  return {
+    kind: "ArrayExpression",
+    elements,
+    type: arrayType(elements[0].type),
+  }
+}
+
+export function tupleExpression(elements) {
+  return {
+    kind: "TupleExpression",
+    elements,
+    type: elements.map(element => element.type),
+  }
+}
+
+export function dictExpression(elements) {
+  return {
+    kind: "DictExpression",
+    elements,
+    type: [dictType(elements[0].type), dictType(elements[1].type)],
+  }
+}
+
+export function emptyArray(type) {
+  return { kind: "EmptyArray", type }
+}
+
+export function memberExpression(object, op, field) {
+  return { kind: "MemberExpression", object, op, field, type: field.type }
 }
 
 export function functionCall(callee, args) {
-  return { kind: "FunctionCall", callee, args }
+  if (callee.intrinsic) {
+    if (callee.type.returnType === voidType) {
+      return {
+        kind: callee.name.replace(/^\p{L}/u, c => c.toUpperCase()),
+        args,
+      }
+    } else if (callee.type.paramTypes.length === 1) {
+      return unary(callee.name, args[0], callee.type.returnType)
+    } else {
+      return binary(callee.name, args[0], args[1], callee.type.returnType)
+    }
+  }
+  return { kind: "FunctionCall", callee, args, type: callee.type.returnType }
 }
 
+export function constructorCall(callee, args) {
+  return { kind: "ConstructorCall", callee, args, type: callee }
+}
+
+// These local constants are used to simplify the standard library definitions.
+const floatToFloatType = functionType([floatType], floatType)
+const floatFloatToFloatType = functionType([floatType, floatType], floatType)
+const stringToIntsType = functionType([stringType], arrayType(intType))
+const anyToVoidType = functionType([anyType], voidType)
+
 export const standardLibrary = Object.freeze({
-  print: {
-    kind: "BuiltInFunction",
-    name: "print"
-  },
-  
-  len: {
-    kind: "BuiltInFunction",
-    name: "len"
-  },
-  
-  str: {
-    kind: "BuiltInFunction",
-    name: "str"
-  },
-  
-  num: {
-    kind: "BuiltInFunction",
-    name: "num"
-  },
-  
-  PI: {
-    kind: "Constant",
-    name: "PI",
-    value: 3.14159
-  },
-  
-  TRUE: {
-    kind: "Constant",
-    name: "TRUE",
-    value: true
-  },
-  
-  FALSE: {
-    kind: "Constant",
-    name: "FALSE",
-    value: false
-  }
-});
+  int: intType,
+  float: floatType,
+  boolean: booleanType,
+  string: stringType,
+  void: voidType,
+  any: anyType,
+  π: variable("π", false, floatType),
+  print: intrinsicFunction("print", anyToVoidType),
+  sqrt: intrinsicFunction("sqrt", floatToFloatType),
+  sin: intrinsicFunction("sin", floatToFloatType),
+  cos: intrinsicFunction("cos", floatToFloatType),
+  exp: intrinsicFunction("exp", floatToFloatType),
+  ln: intrinsicFunction("ln", floatToFloatType),
+  hypot: intrinsicFunction("hypot", floatFloatToFloatType),
+  bytes: intrinsicFunction("bytes", stringToIntsType),
+  codepoints: intrinsicFunction("codepoints", stringToIntsType),
+})
+
+// We want every expression to have a type property. But we aren't creating
+// special entities for numbers, strings, and booleans; instead, we are
+// just using JavaScript values for those. Fortunately we can monkey patch
+// the JS classes for these to give us what we want.
+String.prototype.type = stringType
+Number.prototype.type = floatType
+BigInt.prototype.type = intType
+Boolean.prototype.type = booleanType
