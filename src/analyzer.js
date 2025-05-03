@@ -76,38 +76,13 @@ export default function analyze(match) {
     must(e.type === core.booleanType, `Expected a boolean, got ${e.type}`, at)
   }
 
-  function mustHaveIntegerType(e, at) {
-    must(e.type === core.intType, "Expected an integer", at)
-  }
-
-  function mustHaveAnArrayType(e, at) {
-    must(e.type?.kind === "ArrayType", "Expected an array", at)
-  }
-
   function mustHaveIterableType(e, at) {
     must(
       e.type?.kind === "ArrayType" || e.type?.kind === "DictType",
       `Expected an array or dict, got: ${e.name}`,
       at
     )
-  }
-
-  function mustHaveAnOptionalType(e, at) {
-    must(e.type?.kind === "OptionalType", "Expected an optional", at)
-  }
-
-  function mustHaveAStructType(e, at) {
-    must(e.type?.kind === "StructType", "Expected a struct", at)
-  }
-
-  function mustHaveAnOptionalStructType(e, at) {
-    // Used to check e?.x expressions, e must be an optional struct
-    must(
-      e.type?.kind === "OptionalType" && e.type.baseType?.kind === "StructType",
-      "Expected an optional struct",
-      at
-    )
-  }
+    }
 
   function mustBothHaveTheSameType(e1, e2, at) {
     must(
@@ -115,40 +90,6 @@ export default function analyze(match) {
       `Operands do not have the same type : ${e1.type}, ${e2.type}`,
       at
     )
-  }
-
-  function mustAllHaveSameType(expressions, at) {
-    // Used to check the elements of an array expression, and the two
-    // arms of a conditional expression, among other scenarios.
-    must(
-      expressions.slice(1).every(e => equivalent(e.type, expressions[0].type)),
-      "Not all elements have the same type",
-      at
-    )
-  }
-
-  function mustBeAType(e, at) {
-    const isBasicType = /int|float|string|bool|void|any/.test(e)
-    const isCompositeType = /StructType|FunctionType|ArrayType|OptionalType/.test(e?.kind)
-    must(isBasicType || isCompositeType, "Type expected", at)
-  }
-
-  function mustBeAnArrayType(t, at) {
-    must(t?.kind === "ArrayType", "Must be an array type", at)
-  }
-
-  function includesAsField(structType, type) {
-    // Whether the struct type has a field of type type, directly or indirectly
-    return structType.fields.some(
-      field =>
-        field.type === type ||
-        (field.type?.kind === "StructType" && includesAsField(field.type, type))
-    )
-  }
-
-  function mustNotBeSelfContaining(structType, at) {
-    const containsSelf = includesAsField(structType, structType)
-    must(!containsSelf, "Struct type must not be self-containing", at)
   }
 
   function equivalent(t1, t2) {
@@ -174,10 +115,8 @@ export default function analyze(match) {
       equivalent(fromType, toType) ||
       (fromType?.kind === "FunctionType" &&
         toType?.kind === "FunctionType" &&
-        // covariant in return types
         assignable(fromType.returnType, toType.returnType) &&
         fromType.paramTypes.length === toType.paramTypes.length &&
-        // contravariant in parameter types
         toType.paramTypes.every((t, i) => assignable(t, fromType.paramTypes[i])))
     )
   }
@@ -185,13 +124,7 @@ export default function analyze(match) {
   function typeDescription(type) {
     if (typeof type === "string") return type
     if (type.kind == "StructType") return type.name
-    if (type.kind == "FunctionType") {
-      const paramTypes = type.paramTypes.map(typeDescription).join(", ")
-      const returnType = typeDescription(type.returnType)
-      return `(${paramTypes})->${returnType}`
-    }
     if (type.kind == "ArrayType") return `[${typeDescription(type.baseType)}]`
-    if (type.kind == "OptionalType") return `${typeDescription(type.baseType)}?`
   }
 
   function mustBeAssignable(e, { toType: type }, at) {
@@ -199,15 +132,6 @@ export default function analyze(match) {
     const target = typeDescription(type)
     const message = `Cannot assign a ${source} to a ${target}`
     must(assignable(e.type, type), message, at)
-  }
-
-  function mustHaveDistinctFields(type, at) {
-    const fieldNames = new Set(type.fields.map(f => f.name))
-    must(fieldNames.size === type.fields.length, "Fields must be distinct", at)
-  }
-
-  function mustHaveMember(structType, field, at) {
-    must(structType.fields.map(f => f.name).includes(field), "No such field", at)
   }
 
   function mustBeInLoop(at) {
@@ -226,15 +150,6 @@ export default function analyze(match) {
   function mustNotReturnAnything(f, at) {
     const returnsNothing = f.type.returnType === core.voidType
     must(returnsNothing, "Something should be returned", at)
-  }
-
-  function mustReturnSomething(f, at) {
-    const returnsSomething = f.type.returnType !== core.voidType
-    must(returnsSomething, "Cannot return a value from this function", at)
-  }
-
-  function mustBeReturnable(e, { from: f }, at) {
-    mustBeAssignable(e, { toType: f.type.returnType }, at)
   }
 
   function mustHaveCorrectArgumentCount(argCount, paramCount, at) {
@@ -484,9 +399,9 @@ export default function analyze(match) {
     Type_int(_egg) {
       return core.intType
     },
-    Type_float(_bacon) {
-      return core.floatType
-    },
+    // Type_float(_bacon) {
+    //   return core.floatType
+    // },
     Type_string(_pasta) {
       return core.stringType
     },
@@ -584,27 +499,11 @@ export default function analyze(match) {
       const object = exp.rep()
       if (object.type?.kind === "DictType") {
         return core.memberExpression(object, dot.sourceString, "items")
-      } else {
-        let structType
-        if (dot.sourceString === "?.") {
-          mustHaveAnOptionalStructType(object, { at: exp })
-          structType = object.type.baseType
-        } else {
-          mustHaveAStructType(object, { at: exp })
-          structType = object.type
-        }
-        mustHaveMember(structType, id.sourceString, { at: id })
-        const field = structType.fields.find(f => f.name === id.sourceString)
-        return core.memberExpression(object, dot.sourceString, field)
-      }
+      } 
     },
 
     Params(params) {
       return params.rep()
-    },
-
-    emptyListOf() {
-      return []
     },
 
     NonemptyListOf(elem, _sep, elems) {
@@ -620,16 +519,16 @@ export default function analyze(match) {
       return param
     },
 
-    // For initialization: "🍳" id "=" Exp "," Exp "," id "++"
-    ForInit(varDecl, _comma1, index, op, target, _comma2, bumpId, _op) {
-      return {
-        varDecl: varDecl.rep(),
-        index: index.sourceString,
-        op: op.sourceString,
-        target: target.sourceString,
-        bump: bumpId.sourceString,
-      }
-    },
+    // // For initialization: "🍳" id "=" Exp "," Exp "," id "++"
+    // ForInit(varDecl, _comma1, index, op, target, _comma2, bumpId, _op) {
+    //   return {
+    //     varDecl: varDecl.rep(),
+    //     index: index.sourceString,
+    //     op: op.sourceString,
+    //     target: target.sourceString,
+    //     bump: bumpId.sourceString,
+    //   }
+    // },
 
     // Collection literals
     ArrayLit(_open, items, _close) {
@@ -688,16 +587,8 @@ export default function analyze(match) {
       }
     },
 
-    ExpList(expressions) {
-      return expressions.map(e => e.rep())
-    },
-
     _iter(...children) {
       return children.map(child => child.rep())
-    },
-
-    _terminal() {
-      return this.sourceString
     },
 
     id(_char, _chars) {
