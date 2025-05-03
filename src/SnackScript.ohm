@@ -1,11 +1,11 @@
 SnackScript {
   Program = Statement+
-  
+
   Statement = "🫙" id Block                                       --class
             | "🥘" id "(" Params ")" Block                        --function
             | "🥘" id Block                                       --simplefunction
             | "🍥" id "in" Exp ("..." | "..<") Exp Block          --forloop
-            | "🍥" ListOf<id, ","> "in" Primary Block             --foreach 
+            | "🍥" ListOf<id, ","> "in" Primary Block             --foreach
             | "🍤" Exp Block                                      --while
             | "🧁" Exp Block ElseIfPart*  ElsePart?               --if
             | "🍽️" ExpList                                        --print
@@ -13,16 +13,16 @@ SnackScript {
             | "🫖"                                                --break
             | "🥡" id "=" CollectionLit                           --collection
             | "🍱" id "=" "{" CompExp "}"                         --comprehension
-            | VarDecl                                   
+            | VarDecl
             | Primary "=" Exp                                      --assign
             | Primary "+=" Exp                                     --addassign
             | Primary ("++" | "--")                        --bump
             | Primary_call                             --call
-  
+
   Block = ":" Statement+ ";"
-  
+
   MethodDecl = "🥘" id "(" ParamList ")" ":" Block
-  
+
   Type = "🧈"         --bool
          | "🍳"        --int
          | "🍳"        --float
@@ -32,57 +32,57 @@ SnackScript {
 
   Params = ParamList
          | EmptyParams
-  
+
   EmptyParams = ""
-  
+
   ParamList = NonEmptyParamList
           | EmptyParamList
-  
+
   NonEmptyParamList = ListOf<ParamItem, ",">
   EmptyParamList = ""
-  
+
   ParamItem = Type id
-  
+
   ForInit = VarDecl "," (id | numeral) RelOp (id | numeral) "," id "++"
-  
+
   ElseIfPart = "🍰" Exp Block
-  
+
   ElsePart = "🎂" Block
-  
-  ExpList = ListOf<(Exp | stringLit), ",">
-  
-  
+
+  ExpList = NonemptyListOf<(Exp | stringLit), ",">
+
+
   VarDecl = Type id "=" Exp
-  
+
   CompExp = id ":" Exp "for" ListOf<id, ","> "in" id
-  
+
   CollectionLit = ArrayLit
                 | DictLit
-  
+
   ArrayLit = "[" ListOf<ArrayItem, ","> "]"
-  
+
   DictLit = "{" ListOf<DictItem, ","> "}"
-  
+
   ArrayItem = TupleItem
             | SimpleItem
-            
+
   TupleItem = "(" ListOf<Exp, ","> ")"
   SimpleItem = Exp
-  
+
   DictItem = Exp ":" Exp
-  
+
   Exp = Exp1 RelOp Exp1                                       --binary
       | Exp1
-  
+
   Exp1 = Exp1 AddOp Term                                      --binary
        | Term
-  
+
   Term = Term MulOp Factor                                    --binary
        | Factor
-  
+
   Factor = "not" Factor                                         --neg
          | Primary
-  
+
   Primary = Primary "(" ListOf<Exp, ","> ")"                  --call
           | BoolLit                                           --bool
           | numeral                                           --num
@@ -90,28 +90,28 @@ SnackScript {
           | DottedId                                          --var
           | id                                                --id
           | "(" Exp ")"                                       --paren
-  
+
   BoolLit = "🥗" | "🍲"
-  
+
   RelOp = "<=" | ">=" | "==" | "!=" | "<" | ">"
   AddOp = "+" | "-"
   MulOp = "*" | "/" | "%"
-  
+
   stringLit = "\"" (~"\"" any)* "\""
-  
+
   numeral = digit+ ("." digit+)?
-  
+
   id = ~keyword (letter | "_") (alnum | "_" | "*")*
   ids = id (", " id)*
 
   DottedId = Primary ("." | "?.") id
-  
+
   keyword = "in" | "for"
-  
+
   NewLine = "\n"+
   IndentMarker = &(space+)  // Just a positive lookahead, not consuming input
   DedentMarker = &(space*)  // Just a positive lookahead, not consuming input
-  
+
   space += comment | multicomment
   comment = "🍦" (~"\n" any)*                               --comment
   multicomment = "🍨" (~"🍨" any)* "🍨"                      --multicomment

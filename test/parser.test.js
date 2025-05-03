@@ -6,7 +6,7 @@ import parse from "../src/parser.js";
 const syntaxChecks = [
   ["simplest program", '🍽️ "Hello"'],
   ["multiple statements", '🍽️ "Hello"\n🍽️ "World"'],
-  ["variable declaration", "🍳 a = 0, b = 1, f = 1"],
+  ["variable declaration", "🍳 a = 0\n🍳 b = 1\n🍳 f = 1"],
   ["simple assignment", "score = 95"],
   ["boolean literals", "engine_started = 🥗"],
   ["single line comment", '🍦 This is a comment\n🍽️ "Hello"'],
