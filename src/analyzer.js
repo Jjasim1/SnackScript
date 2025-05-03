@@ -7,14 +7,8 @@ class Context {
   // context records whether analysis is current within a loop (so we can
   // properly check break statements), and reference to the current function
   // (so we can properly check return statements).
-  constructor({
-    parent = null,
-    locals = new Map(),
-    inLoop = false,
-    function: f = null,
-    class: c = null,
-  }) {
-    Object.assign(this, { parent, locals, inLoop, function: f, class: c })
+  constructor({ parent = null, locals = new Map(), inLoop = false, function: f = null }) {
+    Object.assign(this, { parent, locals, inLoop, function: f })
   }
   add(name, entity) {
     this.locals.set(name, entity)
@@ -261,16 +255,16 @@ export default function analyze(match) {
       return core.program(statements.children.map(s => s.rep()))
     },
 
-    // Class declaration: "🫙" id Block
-    Statement_class(_jar, id, block) {
-      mustNotAlreadyBeDeclared(id.sourceString, { at: id })
-      const klass = core.classType(id.sourceString, "self")
-      context.add(id.sourceString, klass)
-      context = context.newChildContext({ inLoop: false, class: klass })
-      klass.methods = block.children.map(m => m.rep())
-      context = context.parent
-      return core.classDeclaration(klass)
-    },
+    // Class declaration: "🫙" id  Block
+    // Statement_class(_jar, id, block) {
+    //   mustNotAlreadyBeDeclared(id.sourceString, { at: id })
+    //   const klass = core.classType(id.sourceString, ["self"], [])
+    //   context.add(id.sourceString, klass)
+    //   context = context.newChildContext({ inLoop: false, class: klass })
+    //   klass.methods = block.children.map(m => m.rep())
+    //   context = context.parent
+    //   return core.classDeclaration(klass)
+    // },
 
     // Function declaration: "🥘" id Params Block
     Statement_function(_pot, id, _open, params, _close, block) {
@@ -279,6 +273,7 @@ export default function analyze(match) {
       context.add(id.sourceString, fun)
 
       context = context.newChildContext({ inLoop: false, function: fun })
+
       fun.params = params.rep()
 
       const paramTypes = fun.params.map(param => param.type)
@@ -286,6 +281,7 @@ export default function analyze(match) {
 
       fun.body = block.rep()
       context = context.parent
+
       return core.functionDeclaration(fun)
     },
 
@@ -562,9 +558,6 @@ export default function analyze(match) {
 
     Primary_id(id) {
       // When an id appears in an expression, it had better have been declared
-      if (context.class != null && id.sourceString === "self") {
-        return context.class
-      }
       const entity = context.lookup(id.sourceString)
       mustHaveBeenFound(entity, id.sourceString, { at: id })
       return entity
@@ -589,7 +582,6 @@ export default function analyze(match) {
     // Identifiers
     DottedId(exp, dot, id) {
       const object = exp.rep()
-      console.log(object)
       if (object.type?.kind === "DictType") {
         return core.memberExpression(object, dot.sourceString, "items")
       } else {
@@ -607,12 +599,8 @@ export default function analyze(match) {
       }
     },
 
-    ParamList(_iter) {
-      return _iter.rep()
-    },
-
-    NonEmptyParamList(params) {
-      return params.asIteration().rep() // remember asIteration (maybe?)
+    Params(params) {
+      return params.rep()
     },
 
     emptyListOf() {
@@ -623,20 +611,9 @@ export default function analyze(match) {
       return [elem.rep()].concat(elems.rep())
     },
 
-    // Parameter item: "🍳"? id
-    ParamItem(_egg, id) {
-      const isEgg = _egg !== undefined
-      const param = core.variable(id.sourceString, isEgg ? core.intType : core.anyType)
-
-      mustNotAlreadyBeDeclared(param.name, { at: id })
-      context.add(param.name, param)
-      return param
-    },
-
-    // Parameter item: "🍳"? id
-    ParamItem(_egg, id) {
-      const isEgg = _egg !== undefined
-      const param = core.variable(id.sourceString, isEgg ? core.intType : core.anyType)
+    // Parameter item: type id
+    ParamItem(type, id) {
+      const param = core.variable(id.sourceString, type.rep())
 
       mustNotAlreadyBeDeclared(param.name, { at: id })
       context.add(param.name, param)

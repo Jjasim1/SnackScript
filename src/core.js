@@ -41,13 +41,13 @@ export function intrinsicFunction(name, type) {
   return { kind: "Function", name, type, intrinsic: true }
 }
 
-export function classDeclaration(classType) {
-  return { kind: "ClassDeclaration", classType }
-}
+// export function classDeclaration(classType) {
+//   return { kind: "ClassDeclaration", classType }
+// }
 
-export function classType(name, fields) {
-  return { kind: "ClassType", name, fields }
-}
+// export function classType(name, fields, methods) {
+//   return { kind: "ClassType", name, fields, methods }
+// }
 
 export function arrayType(baseType) {
   return { kind: "ArrayType", baseType }

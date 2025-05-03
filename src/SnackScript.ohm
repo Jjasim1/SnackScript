@@ -1,8 +1,7 @@
 SnackScript {
   Program = Statement+
 
-  Statement = "🫙" id Block                                       --class
-            | "🥘" id "(" Params ")" Block                        --function
+  Statement = "🥘" id "(" Params ")" Block                        --function
             | "🥘" id Block                                       --simplefunction
             | "🍥" id "in" Exp ("..." | "..<") Exp Block          --forloop
             | "🍥" ListOf<id, ","> "in" Primary Block             --foreach
@@ -21,7 +20,7 @@ SnackScript {
 
   Block = ":" Statement+ ";"
 
-  MethodDecl = "🥘" id "(" ParamList ")" ":" Block
+  MethodDecl = "🥘" id "(" Params ")" ":" Block
 
   Type = "🧈"         --bool
          | "🍳"        --int
@@ -30,16 +29,7 @@ SnackScript {
          | "🥮"        --void
          | "🍚"        --any
 
-  Params = ParamList
-         | EmptyParams
-
-  EmptyParams = ""
-
-  ParamList = NonEmptyParamList
-          | EmptyParamList
-
-  NonEmptyParamList = ListOf<ParamItem, ",">
-  EmptyParamList = ""
+  Params = NonemptyListOf<ParamItem, ",">
 
   ParamItem = Type id
 
