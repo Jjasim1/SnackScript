@@ -20,7 +20,6 @@ export const floatType = "🍳"
 export const stringType = "🍝"
 export const voidType = "🥮"
 export const anyType = "🍚"
-export const classType = ""
 
 export function structType(name, fields) {
   return { kind: "StructType", name, fields }
@@ -46,8 +45,8 @@ export function classDeclaration(classType) {
   return { kind: "ClassDeclaration", classType }
 }
 
-export function cl(name) {
-  return { kind: "Class", name, methods: [] }
+export function classType(name, fields) {
+  return { kind: "ClassType", name, fields }
 }
 
 export function arrayType(baseType) {

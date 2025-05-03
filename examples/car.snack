@@ -1,12 +1,12 @@
 🫙 Car:
-  🥘 _init_ (🫙 self, 🍝 make, 🍝 model, 🍳 year):
+  🥘 _init_ (🍝 make, 🍝 model, 🍳 year):
     self.make = make
     self.model = model
     self.year = year
     self.engine_started = 🍲
   ;
 
-  🥘 start_engine(🫙 self):
+  🥘 start_engine:
     🧁 not self.engine_started:
       self.engine_Started = 🥗
       🍽️ "Started the engine for the", self.year, self.make, self.model
@@ -16,7 +16,7 @@
     ;
   ;
 
-  🥘 stop_engine(🫙 self):
+  🥘 stop_engine:
     🧁 self.engine_started:
       self.engine_started = 🍲
       🍽️ "Stopped the engine for the", self.year, self.make, self.model
