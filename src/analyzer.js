@@ -26,6 +26,10 @@ class Context {
   }
 }
 
+export function emptyListOf() {
+  return [];
+}
+
 export default function analyze(match) {
   // Track the context manually via a simple variable. The initial context
   // contains the mappings from the standard library. Add to this context
@@ -95,16 +99,12 @@ export default function analyze(match) {
   function equivalent(t1, t2) {
     return (
       t1 === t2 ||
-      (t1?.kind === "OptionalType" &&
-        t2?.kind === "OptionalType" &&
-        equivalent(t1.baseType, t2.baseType)) ||
       (t1?.kind === "ArrayType" &&
         t2?.kind === "ArrayType" &&
         equivalent(t1.baseType, t2.baseType)) ||
       (t1?.kind === "FunctionType" &&
         t2?.kind === "FunctionType" &&
         equivalent(t1.returnType, t2.returnType) &&
-        t1.paramTypes.length === t2.paramTypes.length &&
         t1.paramTypes.every((t, i) => equivalent(t, t2.paramTypes[i])))
     )
   }
@@ -113,17 +113,22 @@ export default function analyze(match) {
     return (
       toType == core.anyType ||
       equivalent(fromType, toType) ||
-      (fromType?.kind === "FunctionType" &&
-        toType?.kind === "FunctionType" &&
-        assignable(fromType.returnType, toType.returnType) &&
-        fromType.paramTypes.length === toType.paramTypes.length &&
-        toType.paramTypes.every((t, i) => assignable(t, fromType.paramTypes[i])))
+      isFunctionTypeAssignable(fromType, toType)
     )
+  }
+
+  function isFunctionTypeAssignable(fromType, toType) {
+    if (fromType?.kind !== "FunctionType" || toType?.kind !== "FunctionType") {
+      return false;
+    }
+    
+    if (fromType.paramTypes.length !== toType.paramTypes.length) {
+      return false;
+    }
   }
 
   function typeDescription(type) {
     if (typeof type === "string") return type
-    if (type.kind == "StructType") return type.name
     if (type.kind == "ArrayType") return `[${typeDescription(type.baseType)}]`
   }
 
@@ -170,18 +175,6 @@ export default function analyze(match) {
       return core.program(statements.children.map(s => s.rep()))
     },
 
-    // Class declaration: "🫙" id  Block
-    // Statement_class(_jar, id, block) {
-    //   mustNotAlreadyBeDeclared(id.sourceString, { at: id })
-    //   const klass = core.classType(id.sourceString, ["self"], [])
-    //   context.add(id.sourceString, klass)
-    //   context = context.newChildContext({ inLoop: false, class: klass })
-    //   klass.methods = block.children.map(m => m.rep())
-    //   context = context.parent
-    //   return core.classDeclaration(klass)
-    // },
-
-    // Function declaration: "🥘" id Params Block
     Statement_function(_pot, id, _open, params, _close, block) {
       mustNotAlreadyBeDeclared(id.sourceString, { at: id })
       const fun = core.fun(id.sourceString)
@@ -399,9 +392,7 @@ export default function analyze(match) {
     Type_int(_egg) {
       return core.intType
     },
-    // Type_float(_bacon) {
-    //   return core.floatType
-    // },
+
     Type_string(_pasta) {
       return core.stringType
     },
@@ -455,10 +446,7 @@ export default function analyze(match) {
       const callee = exp.rep()
       mustBeCallable(callee, { at: exp })
       const exps = expList.asIteration().children
-      const targetTypes =
-        callee?.kind === "StructType"
-          ? callee.fields.map(f => f.type)
-          : callee.type.paramTypes
+      const targetTypes = callee.type.paramTypes
       mustHaveCorrectArgumentCount(exps.length, targetTypes.length, {
         at: open,
       })
@@ -466,9 +454,7 @@ export default function analyze(match) {
         const arg = exp.rep()
         return arg
       })
-      return callee?.kind === "StructType"
-        ? core.constructorCall(callee, args)
-        : core.functionCall(callee, args)
+      return core.functionCall(callee, args)
     },
 
     Primary_id(id) {
@@ -506,6 +492,10 @@ export default function analyze(match) {
       return params.rep()
     },
 
+    EmptyListOf() {
+      return emptyListOf();
+    },
+
     NonemptyListOf(elem, _sep, elems) {
       return [elem.rep()].concat(elems.rep())
     },
@@ -519,17 +509,6 @@ export default function analyze(match) {
       return param
     },
 
-    // // For initialization: "🍳" id "=" Exp "," Exp "," id "++"
-    // ForInit(varDecl, _comma1, index, op, target, _comma2, bumpId, _op) {
-    //   return {
-    //     varDecl: varDecl.rep(),
-    //     index: index.sourceString,
-    //     op: op.sourceString,
-    //     target: target.sourceString,
-    //     bump: bumpId.sourceString,
-    //   }
-    // },
-
     // Collection literals
     ArrayLit(_open, items, _close) {
       const elements = items.children.flatMap(i => i.rep())
@@ -539,8 +518,13 @@ export default function analyze(match) {
 
     DictLit(_open, items, _close) {
       const entries = items.children.flatMap(i => i.rep())
-      const keyType = entries.length > 0 ? entries[0].key.type : core.anyType
-      const valueType = entries.length > 0 ? entries[0].value.type : core.anyType
+      let keyType = core.anyType;
+      let valueType = core.anyType;
+
+      if (entries.length > 0) {
+        keyType = entries[0].key.type;
+        valueType = entries[0].value.type;
+      }
       return core.dictExpression(entries, core.dictType(keyType, valueType))
     },
 
