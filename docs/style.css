@@ -1,1 +1,83 @@
+/* General styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f3e6;
+    color: #333;
+    text-align: center; /* Ensures everything is centered */
+}
+
+/* Header styling */
+header {
+    display: flex;
+    justify-content: center; /* Centers everything */
+    align-items: center; /* Vertically aligns */
+    padding: 20px;
+    background-color: #222;
+    color: white;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+}
+
+/* Section Styling */
+section {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    text-align: center; /* Centers titles and descriptions */
+}
+
+/* Code styling */
+pre {
+    background: #eee;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    text-align: left; /* Ensures code remains left-aligned */
+    display: inline-block; /* Prevents stretching */
+}
+
+/* Developer section */
+.developer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.developer img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background: #6b4226;
+    color: white;
+    margin-top: 20px;
+}
+
+a {
+    color: #ff9800;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
 
