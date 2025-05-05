@@ -74,8 +74,7 @@ export default function generate(program) {
     },
 
     Print(s) {
-      console.log("heyyyyyy")
-      output.push(`console.log(${s.args.map(gen).join(", ")});`)
+      output.push(`console.log(${s.expressions.map(gen).join(", ")});`)
     },
 
     IfStatement(s) {

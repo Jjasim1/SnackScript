@@ -206,7 +206,7 @@ const optimizers = {
     return c
   },
   Print(s) {
-    s.args = s.args.map(optimize)
+    s.expressions = s.expressions.map(optimize)
     return s
   },
 }

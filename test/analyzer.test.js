@@ -472,54 +472,52 @@ describe("The SnackScript analyzer", () => {
     const printStatement = analyzed.statements[analyzed.statements.length - 1]
     
     // Verify basic structure
-    assert.equal(printStatement.kind, "Function")
-    assert.equal(printStatement.name, "print")
-    assert.equal(printStatement.intrinsic, true)
+    assert.equal(printStatement.kind, "Print")
     
     // Verify the processed expression list
-    assert.ok(Array.isArray(printStatement.type))
-    assert.equal(printStatement.type.length, 12)
+    assert.equal(printStatement.expressions.length, 12)
     
     // Test variables of different types
-    assert.equal(printStatement.type[0].kind, "Variable")
-    assert.equal(printStatement.type[0].name, "message")
-    assert.equal(printStatement.type[0].type, "🍝")
+    assert.equal(printStatement.expressions[0].kind, "Variable")
+    assert.equal(printStatement.expressions[0].name, "message")
+    assert.equal(printStatement.expressions[0].type, "🍝")
     
-    assert.equal(printStatement.type[1].kind, "Variable")
-    assert.equal(printStatement.type[1].name, "x")
+    assert.equal(printStatement.expressions[1].kind, "Variable")
+    assert.equal(printStatement.expressions[1].name, "x")
+    assert.equal(printStatement.expressions[1].type, "🍳")
     
     // Test simple binary expression (x + y)
-    assert.equal(printStatement.type[3].kind, "BinaryExpression")
-    assert.equal(printStatement.type[3].op, "+")
-    assert.equal(printStatement.type[3].left.name, "x")
-    assert.equal(printStatement.type[3].right.name, "y")
+    assert.equal(printStatement.expressions[3].kind, "BinaryExpression")
+    assert.equal(printStatement.expressions[3].op, "+")
+    assert.equal(printStatement.expressions[3].left.name, "x")
+    assert.equal(printStatement.expressions[3].right.name, "y")
     
     // Test another binary expression (x * y)
-    assert.equal(printStatement.type[4].kind, "BinaryExpression")
-    assert.equal(printStatement.type[4].op, "*")
+    assert.equal(printStatement.expressions[4].kind, "BinaryExpression")
+    assert.equal(printStatement.expressions[4].op, "*")
     
     // Test comparison expression (x > y)
-    assert.equal(printStatement.type[5].kind, "BinaryExpression")
-    assert.equal(printStatement.type[5].op, ">")
+    assert.equal(printStatement.expressions[5].kind, "BinaryExpression")
+    assert.equal(printStatement.expressions[5].op, ">")
     
     // Test complex expression ((x + y) * 2)
-    assert.equal(printStatement.type[6].kind, "BinaryExpression")
-    assert.equal(printStatement.type[6].op, "*")
-    assert.equal(printStatement.type[6].left.kind, "BinaryExpression")
-    assert.equal(printStatement.type[6].left.op, "+")
+    assert.equal(printStatement.expressions[6].kind, "BinaryExpression")
+    assert.equal(printStatement.expressions[6].op, "*")
+    assert.equal(printStatement.expressions[6].left.kind, "BinaryExpression")
+    assert.equal(printStatement.expressions[6].left.op, "+")
     
     // Test string literal
-    assert.equal(printStatement.type[7], "\"Result:\"")
+    assert.equal(printStatement.expressions[7], "\"Result:\"")
     
     // Test numeric literal
-    assert.equal(printStatement.type[8], 3.14)
+    assert.equal(printStatement.expressions[8], 3.14)
     
     // Test boolean variable and literals
-    assert.equal(printStatement.type[9].kind, "Variable")
-    assert.equal(printStatement.type[9].name, "flag")
+    assert.equal(printStatement.expressions[9].kind, "Variable")
+    assert.equal(printStatement.expressions[9].name, "flag")
     
-    assert.equal(printStatement.type[10], true)
-    assert.equal(printStatement.type[11], false)
+    assert.equal(printStatement.expressions[10], true)
+    assert.equal(printStatement.expressions[11], false)
   })
 
   it("correctly analyzes dictionary items", () => {

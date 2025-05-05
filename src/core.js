@@ -97,6 +97,10 @@ export function unary(op, operand, type) {
   return { kind: "UnaryExpression", op, operand, type }
 }
 
+export function print(expressions) {
+  return {kind: "Print", expressions}
+}
+
 export function arrayExpression(elements) {
   return {
     kind: "ArrayExpression",
