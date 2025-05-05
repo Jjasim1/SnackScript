@@ -302,7 +302,8 @@ export default function analyze(match) {
     // Print statement: "🍽️" ExpList
     Statement_print(_plate, expList) {
       const expressions = expList.asIteration().children.map(e => e.rep())
-      return core.intrinsicFunction("print", expressions)
+      const printFunction = core.standardLibrary.print
+      return core.functionCall(printFunction, expressions)
     },
 
     // Return statement: "🫗" Exp | "🫗"

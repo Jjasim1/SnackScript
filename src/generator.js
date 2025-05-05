@@ -121,6 +121,14 @@ export default function generate(program) {
       return `(${left} ${op} ${right})`
     },
 
+    UnaryExpression(e) {
+      const x = gen(e.operand)
+      if (e.op === 'print') {
+        output.push(`console.log(${x});`)
+      }
+      return `(${e.op}${x})`
+    },
+
     IntegerLiteral(e) {
       return e.value.toString()
     },

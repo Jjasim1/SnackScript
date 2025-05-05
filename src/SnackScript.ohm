@@ -39,7 +39,7 @@ SnackScript {
 
   ElsePart = "🎂" Block
 
-  ExpList = NonemptyListOf<(Exp | stringLit), ",">
+  ExpList = NonemptyListOf<Exp, ",">
 
 
   VarDecl = Type id "=" Exp

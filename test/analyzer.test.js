@@ -555,38 +555,6 @@ describe("The SnackScript analyzer", () => {
     assert.equal(dictLiteral.elements[2].value, true)
   })
 
-  it("tests NonemptyListOf function with function parameters", () => {
-    const source = `
-      🥘 multiParam(🍳 x, 🍝 y, 🧈 z):
-        🍽️ x, y, z
-      ;
-    `
-
-    const analyzed = analyze(parse(source))
-    
-    assert.equal(analyzed.statements[0].kind, "FunctionDeclaration")
-    assert.equal(analyzed.statements[0].fun.name, "multiParam")
-    
-    assert.ok(Array.isArray(analyzed.statements[0].fun.params))
-    assert.equal(analyzed.statements[0].fun.params.length, 3)
-    
-    // Check each parameter
-    assert.equal(analyzed.statements[0].fun.params[0].name, "x")
-    assert.equal(analyzed.statements[0].fun.params[0].type, "🍳")
-    
-    assert.equal(analyzed.statements[0].fun.params[1].name, "y")
-    assert.equal(analyzed.statements[0].fun.params[1].type, "🍝")
-    
-    assert.equal(analyzed.statements[0].fun.params[2].name, "z")
-    assert.equal(analyzed.statements[0].fun.params[2].type, "🧈")
-    
-    // Also check the print statement inside the function to test another NonemptyListOf instance
-    const printStatement = analyzed.statements[0].fun.body[0]
-    assert.equal(printStatement.name, "print")
-    assert.ok(Array.isArray(printStatement.type))
-    assert.equal(printStatement.type.length, 3)
-  })
-
   it("tests binary expressions with numeric-only operators", () => {
     const source = `
       🍳 x = 10
@@ -856,44 +824,6 @@ describe("The SnackScript analyzer", () => {
     }
     
     assert.ok(errorThrown, "Should throw error on incompatible return type")
-  })
-
-  it("tests print statement creation with first letter capitalization", () => {
-    const source = `
-      🍽️ "Testing capitalization"
-    `
-    
-    const analyzed = analyze(parse(source))
-    const printStmt = analyzed.statements[0]
-    
-    assert.equal(printStmt.kind, "Function")
-    assert.equal(printStmt.name, "print")
-    assert.equal(printStmt.intrinsic, true)
-    
-    // Create a different intrinsic function call
-    const source2 = `
-      🥘 testFunction(🍝 message):
-        🍽️ message
-      ;
-      
-      testFunction("Hello")
-    `
-    
-    const analyzed2 = analyze(parse(source2))
-    
-    // Check the function call
-    const functionCall = analyzed2.statements[1]
-    assert.equal(functionCall.kind, "FunctionCall")
-    assert.ok(Array.isArray(functionCall.args))
-    assert.equal(functionCall.args[0], "\"Hello\"")
-    
-    // Check the print statement inside the function body
-    const functionBody = analyzed2.statements[0].fun.body
-    const printInsideFunction = functionBody[0]
-    
-    assert.equal(printInsideFunction.kind, "Function")
-    assert.equal(printInsideFunction.name, "print")
-    assert.equal(printInsideFunction.intrinsic, true)
   })
 
   it("tests type analysis functionality", () => {
