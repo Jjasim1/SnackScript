@@ -55,19 +55,19 @@ const optimizers = {
   ShortReturnStatement(s) {
     return s
   },
-  IfStatement(s) {
-    s.test = optimize(s.test)
-    s.consequent = s.consequent.flatMap(optimize)
-    if (s.alternate?.kind?.endsWith?.("IfStatement")) {
-      s.alternate = optimize(s.alternate)
-    } else {
-      s.alternate = s.alternate.flatMap(optimize)
-    }
-    if (s.test.constructor === Boolean) {
-      return s.test ? s.consequent : s.alternate
-    }
-    return s
-  },
+  // IfStatement(s) {
+  //   s.test = optimize(s.test)
+  //   s.consequent = s.consequent.flatMap(optimize)
+  //   if (s.alternate?.kind?.endsWith?.("IfStatement")) {
+  //     s.alternate = optimize(s.alternate)
+  //   } else {
+  //     s.alternate = s.alternate.flatMap(optimize)
+  //   }
+  //   if (s.test.constructor === Boolean) {
+  //     return s.test ? s.consequent : s.alternate
+  //   }
+  //   return s
+  // },
   ShortIfStatement(s) {
     s.test = optimize(s.test)
     s.consequent = s.consequent.flatMap(optimize)
