@@ -63,7 +63,7 @@ describe("The code generator", () => {
           body: [
             {
               kind: "Print",
-              args: [{ kind: "StringLiteral", value: "test" }]
+              expressions: [{ kind: "StringLiteral", value: "test" }]
             }
           ]
         }
@@ -103,7 +103,7 @@ describe("The code generator", () => {
         consequent: [
           {
             kind: "Print",
-            args: [{ kind: "StringLiteral", value: "true branch" }]
+            expressions: [{ kind: "StringLiteral", value: "true branch" }]
           }
         ],
         alternate: []
@@ -121,13 +121,13 @@ describe("The code generator", () => {
         consequent: [
           {
             kind: "Print",
-            args: [{ kind: "StringLiteral", value: "true branch" }]
+            expressions: [{ kind: "StringLiteral", value: "true branch" }]
           }
         ],
         alternate: [
           {
             kind: "Print",
-            args: [{ kind: "StringLiteral", value: "false branch" }]
+            expressions: [{ kind: "StringLiteral", value: "false branch" }]
           }
         ]
       });
@@ -151,7 +151,7 @@ describe("The code generator", () => {
     it("handles print statements", () => {
       const program = createProgram({
         kind: "Print",
-        args: [{ kind: "StringLiteral", value: "hello" }]
+        expressions: [{ kind: "StringLiteral", value: "hello" }]
       });
       
       const result = generate(program);
@@ -161,7 +161,7 @@ describe("The code generator", () => {
     it("handles binary expressions", () => {
       const program = createProgram({
         kind: "Print",
-        args: [{
+        expressions: [{
           kind: "BinaryExpression",
           op: "+",
           left: { kind: "StringLiteral", value: "a" },
@@ -177,7 +177,7 @@ describe("The code generator", () => {
     it("handles equality expressions", () => {
       const program = createProgram({
         kind: "Print",
-        args: [{
+        expressions: [{
           kind: "BinaryExpression",
           op: "==",
           left: createVariable("x"),
@@ -192,7 +192,7 @@ describe("The code generator", () => {
     it("handles not-equal expressions", () => {
       const program = createProgram({
         kind: "Print",
-        args: [{
+        expressions: [{
           kind: "BinaryExpression",
           op: "!=",
           left: createVariable("x"),
@@ -212,7 +212,7 @@ describe("The code generator", () => {
     it("handles integer literals", () => {
       const program = createProgram({
         kind: "Print",
-        args: [{ kind: "IntegerLiteral", value: 42 }]
+        expressions: [{ kind: "IntegerLiteral", value: 42 }]
       });
       
       const result = generate(program);
@@ -222,7 +222,7 @@ describe("The code generator", () => {
     it("handles string literals", () => {
       const program = createProgram({
         kind: "Print",
-        args: [{ kind: "StringLiteral", value: "hello" }]
+        expressions: [{ kind: "StringLiteral", value: "hello" }]
       });
       
       const result = generate(program);
@@ -232,7 +232,7 @@ describe("The code generator", () => {
     it("handles boolean literals", () => {
       const program = createProgram({
         kind: "Print",
-        args: [{ kind: "BooleanLiteral", value: true }]
+        expressions: [{ kind: "BooleanLiteral", value: true }]
       });
       
       const result = generate(program);
@@ -251,7 +251,7 @@ describe("The code generator", () => {
         body: [
           {
             kind: "Print",
-            args: [createVariable("i")]
+            expressions: [createVariable("i")]
           }
         ]
       });
@@ -286,7 +286,7 @@ describe("The code generator", () => {
         body: [
           {
             kind: "Print",
-            args: [createVariable("item")]
+            expressions: [createVariable("item")]
           }
         ]
       });
@@ -311,7 +311,7 @@ describe("The code generator", () => {
         },
         {
           kind: "Print",
-          args: [createVariable("x")]
+          expressions: [createVariable("x")]
         }
       ]);
       
@@ -351,7 +351,7 @@ describe("The code generator", () => {
   // Helper to create a simple print statement
   const createPrint = (value) => ({
     kind: "Print",
-    args: [{ kind: "StringLiteral", value }]
+    expressions: [{ kind: "StringLiteral", value }]
   });
   
   describe("If-Else Chain Handling", () => {
