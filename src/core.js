@@ -101,6 +101,46 @@ export function print(expressions) {
   return {kind: "Print", expressions}
 }
 
+export function shortIfStatement(test, consequent) {
+  return { kind: "ShortIfStatement", test, consequent }
+}
+
+export function emptyArray(type) {
+  return { kind: "EmptyArray", type: arrayType(type) }
+}
+
+export function emptyOptional(type) {
+  return { kind: "EmptyOptional", type }
+}
+
+export function repeatStatement(count, body) {
+  return { kind: "RepeatStatement", count, body }
+}
+
+export function forStatement(iterator, collection, body) {
+  return { kind: "ForStatement", iterator, collection, body }
+}
+
+export function subscript(array, index) {
+  return { kind: "SubscriptExpression", array, index }
+}
+
+export function conditional(test, consequent, alternate) {
+  return { kind: "Conditional", test, consequent, alternate }
+}
+
+export function field(name, type) {
+  return { kind: "Field", name, type }
+}
+
+export function typeDeclaration(fields) {
+  return { kind: "TypeDeclaration", fields }
+}
+
+export function constructorCall(callee, args) {
+  return { kind: "ConstructorCall", callee, args, type: callee.type }
+}
+
 export function arrayExpression(elements) {
   return {
     kind: "ArrayExpression",

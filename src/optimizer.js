@@ -17,10 +17,6 @@ const optimizers = {
     d.initializer = optimize(d.initializer)
     return d
   },
-  TypeDeclaration(d) {
-    d.type = optimize(d.type)
-    return d
-  },
   FunctionDeclaration(d) {
     d.fun = optimize(d.fun)
     return d
@@ -55,19 +51,19 @@ const optimizers = {
   ShortReturnStatement(s) {
     return s
   },
-  // IfStatement(s) {
-  //   s.test = optimize(s.test)
-  //   s.consequent = s.consequent.flatMap(optimize)
-  //   if (s.alternate?.kind?.endsWith?.("IfStatement")) {
-  //     s.alternate = optimize(s.alternate)
-  //   } else {
-  //     s.alternate = s.alternate.flatMap(optimize)
-  //   }
-  //   if (s.test.constructor === Boolean) {
-  //     return s.test ? s.consequent : s.alternate
-  //   }
-  //   return s
-  // },
+  IfStatement(s) {
+    s.test = optimize(s.test)
+    s.consequent = s.consequent.flatMap(optimize)
+    if (s.alternate?.kind?.endsWith?.("IfStatement")) {
+      s.alternate = optimize(s.alternate)
+    } else {
+      s.alternate = s.alternate.flatMap(optimize)
+    }
+    if (s.test.constructor === Boolean) {
+      return s.test ? s.consequent : s.alternate
+    }
+    return s
+  },
   ShortIfStatement(s) {
     s.test = optimize(s.test)
     s.consequent = s.consequent.flatMap(optimize)
@@ -107,7 +103,6 @@ const optimizers = {
         }
       }
     }
-    return s
   },
   ForStatement(s) {
     s.iterator = optimize(s.iterator)
