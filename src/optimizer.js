@@ -48,9 +48,6 @@ const optimizers = {
     s.expression = optimize(s.expression)
     return s
   },
-  ShortReturnStatement(s) {
-    return s
-  },
   IfStatement(s) {
     s.test = optimize(s.test)
     s.consequent = s.consequent.flatMap(optimize)
@@ -64,27 +61,10 @@ const optimizers = {
     }
     return s
   },
-  ShortIfStatement(s) {
-    s.test = optimize(s.test)
-    s.consequent = s.consequent.flatMap(optimize)
-    if (s.test.constructor === Boolean) {
-      return s.test ? s.consequent : []
-    }
-    return s
-  },
   WhileStatement(s) {
     s.test = optimize(s.test)
     if (s.test === false) {
       // while false is a no-op
-      return []
-    }
-    s.body = s.body.flatMap(optimize)
-    return s
-  },
-  RepeatStatement(s) {
-    s.count = optimize(s.count)
-    if (s.count === 0) {
-      // repeat 0 times is a no-op
       return []
     }
     s.body = s.body.flatMap(optimize)
@@ -112,15 +92,6 @@ const optimizers = {
       return []
     }
     return s
-  },
-  Conditional(e) {
-    e.test = optimize(e.test)
-    e.consequent = optimize(e.consequent)
-    e.alternate = optimize(e.alternate)
-    if (e.test.constructor === Boolean) {
-      return e.test ? e.consequent : e.alternate
-    }
-    return e
   },
   BinaryExpression(e) {
     e.op = optimize(e.op)
@@ -175,11 +146,6 @@ const optimizers = {
         return -e.operand
       }
     }
-    return e
-  },
-  SubscriptExpression(e) {
-    e.array = optimize(e.array)
-    e.index = optimize(e.index)
     return e
   },
   ArrayExpression(e) {

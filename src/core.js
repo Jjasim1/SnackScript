@@ -29,14 +29,6 @@ export function intrinsicFunction(name, type) {
   return { kind: "Function", name, type, intrinsic: true }
 }
 
-// export function classDeclaration(classType) {
-//   return { kind: "ClassDeclaration", classType }
-// }
-
-// export function classType(name, fields, methods) {
-//   return { kind: "ClassType", name, fields, methods }
-// }
-
 export function arrayType(baseType) {
   return { kind: "ArrayType", baseType }
 }
@@ -71,8 +63,6 @@ export function returnStatement(expression) {
   return { kind: "ReturnStatement", expression }
 }
 
-export const shortReturnStatement = { kind: "ShortReturnStatement" }
-
 export function ifStatement(test, consequent, alternate) {
   return { kind: "IfStatement", test, consequent, alternate }
 }
@@ -98,11 +88,7 @@ export function unary(op, operand, type) {
 }
 
 export function print(expressions) {
-  return {kind: "Print", expressions}
-}
-
-export function shortIfStatement(test, consequent) {
-  return { kind: "ShortIfStatement", test, consequent }
+  return { kind: "Print", expressions }
 }
 
 export function emptyArray(type) {
@@ -113,20 +99,8 @@ export function emptyOptional(type) {
   return { kind: "EmptyOptional", type }
 }
 
-export function repeatStatement(count, body) {
-  return { kind: "RepeatStatement", count, body }
-}
-
 export function forStatement(iterator, collection, body) {
   return { kind: "ForStatement", iterator, collection, body }
-}
-
-export function subscript(array, index) {
-  return { kind: "SubscriptExpression", array, index }
-}
-
-export function conditional(test, consequent, alternate) {
-  return { kind: "Conditional", test, consequent, alternate }
 }
 
 export function field(name, type) {
