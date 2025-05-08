@@ -63,12 +63,15 @@ say_hello();
 <td>
 
 ```SnackScript
-🍥 (🍳 i = 1, i <= 10, i++):
-  🍳 row = ""
-  🍥 (🍳 j = 1, j <= 10, j++):
-    row += (i * j) + "\t"
+🍥 i in 0 ... 10:
+  🍝 row = ""
+  🍥 j in 0 ... 10:
+    🍝 num = (i * j)
+    row += num + "\t"
+    j++
   ;
   🍽️ row
+  i++
 ;
 ```
 
@@ -97,8 +100,10 @@ for (let i = 1; i <= 10; i++) {
 
 ```SnackScript
 🥘 fib (🍳 n) :
-  🍳 a = 0, b = 1, f = 1
-  🍥 (🍳 i = 2, i < n, i++):
+  🍳 a = 0
+  🍳 b = 1
+  🍳 f = 1
+  🍥 i in 2...n:
     f = a + b
     a = b
     b = f
@@ -135,7 +140,7 @@ var fib = function(n) {
 
 ```SnackScript
 🥡 student_scores = [ ("Annie", 91), ("Barbara", 58), ("Charlie", 49), ("Daniel", 51) ]
-🥘 determine_grade(score):
+🥘 determine_grade(🍳 score):
   🧁 score >= 90:
     🫗 "A"
   ;
@@ -153,8 +158,8 @@ var fib = function(n) {
   ;
 ;
 🍱 student_grades = {name: determine_grade(score) for name, score in student_scores}
-🍥 student, grade in student_grades.🥚:
-  🍽️ student + ":" + grade
+🍥 student, grade in student_grades.items:
+  🍽️ student, ":", grade
 ;
 ```
 
@@ -186,7 +191,7 @@ for student, grade in student_grades.items():
 </td>
 </table>
 
-### Classes
+### Intro
 
 <table>
 <tr> <th>SnackScript</th><th>Python</th><tr>
@@ -194,34 +199,20 @@ for student, grade in student_grades.items():
 <td>
 
 ```SnackScript
-🫙 Car:
-  🥘 _init_ (self, make, model, year):
-    self.make = make
-    self.model = model
-    self.year = year
-    self.engine_started = 🍲
-  ;
+🍦 The intro sample script for the language
 
-  🥘 start_engine(self):
-    🧁 not self.engine_started:
-      self.engine_Started = 🥗
-      🍽️ "Started the engine for the", self.year, self.make, self.model
-    ;
-    🎂:
-      🍽️ "The engine is already running"
-    ;
-  ;
+🥡 messages = [ "⍑ᒷꖎl𝙹", "ᓭ⍑ᔑ∷!¡リᒷᓭᓭ ⍊", "||𝙹⚍ ᓭ⍑𝙹⚍ꖎ↸ ∴ᔑℸ ̣ ᓵ⍑ ᔑ∷ᓵᔑリᒷ",  "ᓭℸ ̣ ∷╎ꖌᒷ ᒲᒷ ↸𝙹∴リ ∴╎ℸ ̣ ⍑ ᔑꖎꖎ 𝙹⎓ ||𝙹⚍∷ ⍑ᔑℸ ̣ ∷ᒷ↸",  "ᒲᔑ∴∴╎ᔑ⊣ᒷ ╎ᓭ ∴⍑ᔑℸ ̣  ʖ∴╎リ⊣ᓭ ⚍ᓭ ℸ ̣ 𝙹⊣ᒷ⍊ᔑ⍑ ℸ ̣ 𝙹↸ᔑ||", "ᔑリ↸ ||𝙹⚍∷ ⋮𝙹⚍∷リᒷ|| ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ ↸ᔑ∷ꖌ ᓭ╎↸ᒷ ∴╎ꖎꖎ ʖᒷ ᓵ𝙹ᒲ!¡ꖎᒷℸ ̣ ᒷ"]
+🍳 name = "SnackScript"
 
-  🥘 stop_engine(self):
-    🧁 self.engine_started:
-      self.engine_started = 🍲
-      🍽️ "Stopped the engine for the", self.year, self.make, self.model
-    ;
-    🎂:
-      🍽️ "The engine is already stopped"
-    ;
+🥘 printMessage:
+  🍥 message in messages:
+    🍽️ message, "\r"
   ;
 ;
+
+🍽️ printMessage()
+🍽️ "Welcome to ", name,"!"
+🍽️ printMessage()
 ```
 
 </td>
@@ -229,26 +220,18 @@ for student, grade in student_grades.items():
 <td>
 
 ```
-class Car:
-  def __init__(self, make, model, year):
-    self.make = make
-    self.model = model
-    self.year = year
-    self.engine_started = False
+// The intro sample script for the language
 
-  def start_engine(self):
-    if not self.engine_started:
-      self.engine_started = True
-      print("Started the engine for the", self.year, self.make, self.model)
-    else:
-      print("The engine is already running")
+messages = [ "⍑ᒷꖎl𝙹", "ᓭ⍑ᔑ∷!¡リᒷᓭᓭ ⍊", "||𝙹⚍ ᓭ⍑𝙹⚍ꖎ↸ ∴ᔑℸ ̣ ᓵ⍑ ᔑ∷ᓵᔑリᒷ",  "ᓭℸ ̣ ∷╎ꖌᒷ ᒲᒷ ↸𝙹∴リ ∴╎ℸ ̣ ⍑ ᔑꖎꖎ 𝙹⎓ ||𝙹⚍∷ ⍑ᔑℸ ̣ ∷ᒷ↸",  "ᒲᔑ∴∴╎ᔑ⊣ᒷ ╎ᓭ ∴⍑ᔑℸ ̣  ʖ∴╎リ⊣ᓭ ⚍ᓭ ℸ ̣ 𝙹⊣ᒷ⍊ᔑ⍑ ℸ ̣ 𝙹↸ᔑ||", "ᔑリ↸ ||𝙹⚍∷ ⋮𝙹⚍∷リᒷ|| ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ ↸ᔑ∷ꖌ ᓭ╎↸ᒷ ∴╎ꖎꖎ ʖᒷ ᓵ𝙹ᒲ!¡ꖎᒷℸ ̣ ᒷ"]
+name = "SnackScript"
 
-  def stop_engine(self):
-    if self.engine_started:
-      self.engine_started = False
-      print("Stopped the engine for the", self.year, self.make, self.model)
-    else:
-      print("The engine is already stopped")
+def printMessage():
+  for message in messages:
+    print(message + "\r")
+
+print(printMessage())
+print("Welcome to " + name + "!")
+print(printMessage())
 ```
 
 </td>
